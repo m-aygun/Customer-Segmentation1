@@ -1,6 +1,6 @@
 ---
 title: "Customer segmentation through unsupervised learning K-means"
-description: "beskrivelse"
+description: "Using K-Means clustering to segment customers based on purchasing behavior, enabling data-driven marketing and retention strategies."
 date: today
 published-title: Updated
 author:
@@ -28,7 +28,7 @@ output: true
 code-fold: true
 ---
 
-# Introductio
+# Introduction
 
 Welcome to my portfolio, where I showcase my expertise in **data analysis, machine learning, and customer segmentation**.
 
@@ -175,6 +175,42 @@ length(unique(retaildata$Country))
 retaildata %>%
   summarise(across(where(is.numeric), list(min = ~min(.x, na.rm = TRUE),
                                            max = ~max(.x, na.rm = TRUE))))
+```
+
+## Outliers
+
+Outliers are data points that deviate significantly from the rest of the dataset. Identifying and understanding outliers is crucial because they can **distort statistical analyses, mislead machine learning models, and impact business decisions**. Outliers may result from data entry errors, system anomalies, or genuine rare occurrences, such as high-value customers in a retail dataset. By detecting and analyzing outliers, businesses can **improve data accuracy, refine customer segmentation, and develop targeted strategies**. Whether removing or keeping them, a careful evaluation ensures that insights remain **reliable, actionable, and reflective of real-world patterns**.
+
+The outliers in numercial data are marked by the red dots. The following has been concluded:
+
+It is completely normal to have outliers in data, especially in e-commerce data like your *Online Retail* dataset. Some reasons why outliers occur include:
+
+🔹 **Large wholesale orders** → Some customers buy items in bulk, which can lead to extremely high values in *Quantity*.\
+
+🔹 **Pricing errors or premium products** → *UnitPrice* can vary significantly, for example, if both inexpensive accessories and high-end products are sold.\
+
+🔹 **Returns or data entry errors** → Negative values in *Quantity* may indicate returned items.\
+
+🔹 **Natural variation** → Not all customers shop the same way – some are rare but highly valuable
+
+Based on this conclusion, the the outliers will not be removed from the data set.
+
+```{r Outliers}
+library(ggplot2)
+
+# Plot boxplots for alle numeriske variabler
+numeric_vars <- retaildata %>% select_if(is.numeric)
+
+# Smelt data til langt format for ggplot
+library(reshape2)
+melted_data <- melt(numeric_vars)
+
+# Visualiser outliers med boxplots
+ggplot(melted_data, aes(x = variable, y = value)) + 
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16, outlier.size = 2) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "Boxplots af alle numeriske variabler (Outliers i rød)")
+
 ```
 
 ## Data Preparation
@@ -682,29 +718,31 @@ ggplot(retaildata_scaled, aes(x = customer_segment, y = customer_active_days, fi
 
 To enhance the accuracy and effectiveness of the customer segmentation model, several refinements can be considered:
 
-1️⃣ **Incorporating Additional Influential Variables**
+###  Incorporating Additional Influential Variables
 
--   The current model may **not fully capture all relevant factors** affecting customer behavior. Additional features, such as **purchase recency, seasonal trends, or product categories**, could provide deeper insights into customer preferences.
+The current model may not fully capture all relevant factors affecting customer behavior. Additional features, such as purchase recency, seasonal trends, or product categories, could provide deeper insights into customer preferences.
 
--   Including **customer lifetime value (CLV)** and **frequency of high-value purchases** might help distinguish between casual shoppers and truly valuable customers.
+Including customer lifetime value (CLV) and frequency of high-value purchases might help distinguish between casual shoppers and truly valuable customers.
 
-2️⃣ **Reevaluating the Impact of Country as a Variable**
+2️⃣ Reevaluating the Impact of Country as a Variable
 
--   Preliminary analysis suggests that **geographic location (Country) does not significantly differentiate customer segments**. If further validation confirms this, it may be beneficial to **remove this variable** to reduce noise in the model.
+Preliminary analysis suggests that geographic location (Country) does not significantly differentiate customer segments. If further validation confirms this, it may be beneficial to remove this variable to reduce noise in the model.
 
--   Instead, **regional spending behavior** or **shipping frequency** might be more relevant features to explore.
+Instead, regional spending behavior or shipping frequency might be more relevant features to explore.
 
-3️⃣ **Fine-Tuning the Clustering Approach**
+3️⃣ Fine-Tuning the Clustering Approach
 
--   **Revisiting the number of clusters**: The **current segmentation may be too granular**, leading to **small, less meaningful groups**. Reducing the number of clusters could improve interpretability.
+-   **Revisiting the number of clusters**: The current segmentation may be too granular, leading to small, less meaningful groups. Reducing the number of clusters could improve interpretability.
 
--   **Alternative Clustering Methods**: Exploring **Hierarchical Clustering or DBSCAN** might reveal different grouping patterns that K-Means does not capture effectively.
+-   **Alternative Clustering Methods**: Exploring Hierarchical Clustering or DBSCAN might reveal different grouping patterns that K-Means does not capture effectively.
 
-4️⃣ **Feature Engineering & Normalization**
+4️⃣ Feature Engineering, Outlier Handling & Data Transformation
 
--   Creating **aggregated time-based metrics** (e.g., **purchase trends over different periods**) could improve predictive power.
+-   **Creating aggregated time-based metrics** (e.g., purchase trends over different periods) could improve predictive power.
 
--   Ensuring that **features are appropriately scaled** while preserving meaningful variations can enhance model performance.
+-   **Handling outliers differently**: Instead of removing them, one could apply transformations (e.g., log transformation, Winsorization) to reduce their impact and assess whether the cluster structures change.
+
+-   **Testing different scaling methods**: Ensuring that features are appropriately scaled while preserving meaningful variations can enhance model performance.
 
 By iterating on these improvements, the customer segmentation model can become **more robust, actionable, and aligned with real-world business applications**
 

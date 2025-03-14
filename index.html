@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Mette Jonassen-Aygün">
-<meta name="dcterms.date" content="2025-03-13">
+<meta name="dcterms.date" content="2025-03-14">
 <meta name="description" content="Using K-Means clustering to segment customers based on purchasing behavior, enabling data-driven marketing and retention strategies.">
 
 <title>Customer segmentation through unsupervised learning K-means</title>
@@ -108,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Updated</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">March 13, 2025</p>
+        <p class="date">March 14, 2025</p>
       </div>
     </div>
     
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introductio" id="toc-introductio" class="nav-link active" data-scroll-target="#introductio"><span class="header-section-number">1</span> Introductio</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
   <li><a href="#key-highlights-of-my-work" id="toc-key-highlights-of-my-work" class="nav-link" data-scroll-target="#key-highlights-of-my-work"><span class="header-section-number">1.0.1</span> <strong>Key Highlights of My Work:</strong></a></li>
   </ul></li>
@@ -140,23 +140,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#load-and-inspect-data-set" id="toc-load-and-inspect-data-set" class="nav-link" data-scroll-target="#load-and-inspect-data-set"><span class="header-section-number">2.4.2</span> Load and inspect data set</a></li>
   <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda"><span class="header-section-number">2.4.3</span> EDA</a></li>
   </ul></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><span class="header-section-number">2.5</span> Data Preparation</a>
+  <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers"><span class="header-section-number">2.5</span> Outliers</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><span class="header-section-number">2.6</span> Data Preparation</a>
   <ul class="collapse">
-  <li><a href="#adding-variables" id="toc-adding-variables" class="nav-link" data-scroll-target="#adding-variables"><span class="header-section-number">2.5.1</span> Adding variables</a></li>
-  <li><a href="#adding-dummy-variables" id="toc-adding-dummy-variables" class="nav-link" data-scroll-target="#adding-dummy-variables"><span class="header-section-number">2.5.2</span> Adding dummy variables</a></li>
+  <li><a href="#adding-variables" id="toc-adding-variables" class="nav-link" data-scroll-target="#adding-variables"><span class="header-section-number">2.6.1</span> Adding variables</a></li>
+  <li><a href="#adding-dummy-variables" id="toc-adding-dummy-variables" class="nav-link" data-scroll-target="#adding-dummy-variables"><span class="header-section-number">2.6.2</span> Adding dummy variables</a></li>
   </ul></li>
-  <li><a href="#modelling" id="toc-modelling" class="nav-link" data-scroll-target="#modelling"><span class="header-section-number">2.6</span> Modelling</a></li>
-  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation"><span class="header-section-number">2.7</span> Evaluation</a></li>
-  <li><a href="#deployment" id="toc-deployment" class="nav-link" data-scroll-target="#deployment"><span class="header-section-number">2.8</span> Deployment</a>
+  <li><a href="#modelling" id="toc-modelling" class="nav-link" data-scroll-target="#modelling"><span class="header-section-number">2.7</span> Modelling</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation"><span class="header-section-number">2.8</span> Evaluation</a></li>
+  <li><a href="#deployment" id="toc-deployment" class="nav-link" data-scroll-target="#deployment"><span class="header-section-number">2.9</span> Deployment</a>
   <ul class="collapse">
-  <li><a href="#segment-insights-actionable-strategies" id="toc-segment-insights-actionable-strategies" class="nav-link" data-scroll-target="#segment-insights-actionable-strategies"><span class="header-section-number">2.8.1</span> <strong>Segment Insights &amp; Actionable Strategies</strong></a></li>
-  <li><a href="#how-to-use-these-insights" id="toc-how-to-use-these-insights" class="nav-link" data-scroll-target="#how-to-use-these-insights"><span class="header-section-number">2.8.2</span> <strong>How to Use These Insights</strong></a></li>
+  <li><a href="#segment-insights-actionable-strategies" id="toc-segment-insights-actionable-strategies" class="nav-link" data-scroll-target="#segment-insights-actionable-strategies"><span class="header-section-number">2.9.1</span> <strong>Segment Insights &amp; Actionable Strategies</strong></a></li>
+  <li><a href="#how-to-use-these-insights" id="toc-how-to-use-these-insights" class="nav-link" data-scroll-target="#how-to-use-these-insights"><span class="header-section-number">2.9.2</span> <strong>How to Use These Insights</strong></a></li>
   </ul></li>
   </ul></li>
   <li><a href="#recommendations" id="toc-recommendations" class="nav-link" data-scroll-target="#recommendations"><span class="header-section-number">3</span> Recommendations</a>
   <ul class="collapse">
   <li><a href="#potential-improvements-to-the-model" id="toc-potential-improvements-to-the-model" class="nav-link" data-scroll-target="#potential-improvements-to-the-model"><span class="header-section-number">3.0.1</span> <strong>Potential Improvements to the Model</strong></a></li>
-  <li><a href="#applying-apriori-can-add-value-to-customer-segmentation" id="toc-applying-apriori-can-add-value-to-customer-segmentation" class="nav-link" data-scroll-target="#applying-apriori-can-add-value-to-customer-segmentation"><span class="header-section-number">3.0.2</span> <strong>Applying Apriori Can Add Value to Customer Segmentation</strong></a></li>
+  <li><a href="#incorporating-additional-influential-variables" id="toc-incorporating-additional-influential-variables" class="nav-link" data-scroll-target="#incorporating-additional-influential-variables"><span class="header-section-number">3.0.2</span> Incorporating Additional Influential Variables</a></li>
+  <li><a href="#applying-apriori-can-add-value-to-customer-segmentation" id="toc-applying-apriori-can-add-value-to-customer-segmentation" class="nav-link" data-scroll-target="#applying-apriori-can-add-value-to-customer-segmentation"><span class="header-section-number">3.0.3</span> <strong>Applying Apriori Can Add Value to Customer Segmentation</strong></a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">4</span> <strong>Conclusion</strong></a>
   <ul class="collapse">
@@ -173,8 +175,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="introductio" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Introductio</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>Welcome to my portfolio, where I showcase my expertise in <strong>data analysis, machine learning, and customer segmentation</strong>.</p>
 <p>This project focuses on <strong>customer behavior analysis using the Online Retail dataset</strong>, following the <strong>CRISP-DM framework</strong> to transform raw transaction data into <strong>actionable business insights</strong>.</p>
 <p>Through <strong>data wrangling, exploratory data analysis (EDA), feature engineering, and K-means clustering</strong>, I segment customers into <strong>distinct behavioral groups</strong>. This enables businesses to optimize <strong>marketing strategies, improve customer retention, and maximize revenue</strong>.</p>
@@ -432,111 +434,151 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="data-preparation" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">2.5</span> Data Preparation</h2>
+<section id="outliers" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="outliers"><span class="header-section-number">2.5</span> Outliers</h2>
+<p>Outliers are data points that deviate significantly from the rest of the dataset. Identifying and understanding outliers is crucial because they can <strong>distort statistical analyses, mislead machine learning models, and impact business decisions</strong>. Outliers may result from data entry errors, system anomalies, or genuine rare occurrences, such as high-value customers in a retail dataset. By detecting and analyzing outliers, businesses can <strong>improve data accuracy, refine customer segmentation, and develop targeted strategies</strong>. Whether removing or keeping them, a careful evaluation ensures that insights remain <strong>reliable, actionable, and reflective of real-world patterns</strong>.</p>
+<p>The outliers in numercial data are marked by the red dots. The following has been concluded:</p>
+<p>It is completely normal to have outliers in data, especially in e-commerce data like your <em>Online Retail</em> dataset. Some reasons why outliers occur include:</p>
+<p>🔹 <strong>Large wholesale orders</strong> → Some customers buy items in bulk, which can lead to extremely high values in <em>Quantity</em>.<br>
+</p>
+<p>🔹 <strong>Pricing errors or premium products</strong> → <em>UnitPrice</em> can vary significantly, for example, if both inexpensive accessories and high-end products are sold.<br>
+</p>
+<p>🔹 <strong>Returns or data entry errors</strong> → Negative values in <em>Quantity</em> may indicate returned items.<br>
+</p>
+<p>🔹 <strong>Natural variation</strong> → Not all customers shop the same way – some are rare but highly valuable</p>
+<p>Based on this conclusion, the the outliers will not be removed from the data set.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot boxplots for alle numeriske variabler</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>numeric_vars <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span> <span class="fu">select_if</span>(is.numeric)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Smelt data til langt format for ggplot</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>melted_data <span class="ot">&lt;-</span> <span class="fu">melt</span>(numeric_vars)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser outliers med boxplots</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(melted_data, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> value)) <span class="sc">+</span> </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.colour =</span> <span class="st">"red"</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>, <span class="at">outlier.size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplots af alle numeriske variabler (Outliers i rød)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/Outliers-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="data-preparation" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">2.6</span> Data Preparation</h2>
 <p>The <strong>Data Preparation</strong> phase in CRISP-DM involves transforming raw data into a clean and structured format suitable for modeling. This includes <strong>handling missing values, removing duplicates, feature engineering, encoding categorical variables, scaling numerical data, and selecting relevant features</strong>. A well-prepared dataset enhances model accuracy and ensures meaningful insights, making this step <strong>crucial for the success of any data-driven project</strong>. 🚀</p>
 <p>Removing NA values and transforming values in the column Country into factors</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> <span class="fu">subset</span>(retaildata, <span class="sc">!</span><span class="fu">is.na</span>(CustomerID))</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>retaildata<span class="sc">$</span>Country <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(retaildata<span class="sc">$</span>Country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> <span class="fu">subset</span>(retaildata, <span class="sc">!</span><span class="fu">is.na</span>(CustomerID))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>retaildata<span class="sc">$</span>Country <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(retaildata<span class="sc">$</span>Country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="adding-variables" class="level3" data-number="2.5.1">
-<h3 data-number="2.5.1" class="anchored" data-anchor-id="adding-variables"><span class="header-section-number">2.5.1</span> Adding variables</h3>
+<section id="adding-variables" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="adding-variables"><span class="header-section-number">2.6.1</span> Adding variables</h3>
 <p>Based on the availalbe variables additional features are added.</p>
 <p>The code enhances the dataset by creating several new customer-level features. For each customer (grouped by CustomerID), it computes:</p>
 <p>Total Distinct Stock Codes: the number of unique products purchased. Total Quantity Purchased: the sum of all item quantities bought. Customer Active Days: the time span in days from the customer’s first order to their last order. Average Days Between Orders: the mean number of days separating consecutive orders, with missing values replaced by zero. Total Orders: the count of unique invoices. Total Quantity: a re-calculation of the overall number of items purchased. Total Spent: the total monetary amount spent, computed as the sum of Quantity multiplied by UnitPrice. Average Spent Per Product: derived by dividing total spent by the number of distinct products. Average Quantity Per Order: calculated as the total quantity purchased divided by the number of orders.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_distinct_stockcodes =</span> <span class="fu">n_distinct</span>(StockCode)) <span class="sc">%&gt;%</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_quantity_purchased =</span> <span class="fu">sum</span>(Quantity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">#avg days betwwen orders</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_order_date =</span> <span class="fu">min</span>(InvoiceDate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">last_order_date =</span> <span class="fu">max</span>(InvoiceDate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">customer_active_days =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(last_order_date, first_order_date, <span class="at">units =</span> <span class="st">"days"</span>))</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(InvoiceDate) <span class="sc">%&gt;%</span></span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">days_since_last_order =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(InvoiceDate, <span class="fu">lag</span>(InvoiceDate), <span class="at">units =</span> <span class="st">"days"</span>)),</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_days_between_orders =</span> <span class="fu">mean</span>(days_since_last_order, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">days_since_last_order =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(days_since_last_order), <span class="dv">0</span>, days_since_last_order)  <span class="co"># Replace NA with 0</span></span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="co"># No of orders</span></span>
-<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group data by CustomerID</span></span>
-<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_orders =</span> <span class="fu">n_distinct</span>(InvoiceNo)  <span class="co"># Count unique InvoiceNo per customer</span></span>
-<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to maintain normal dataframe structure</span></span>
-<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group data by CustomerID</span></span>
-<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_quantity =</span> <span class="fu">sum</span>(Quantity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="co"># Sum all Quantity values per customer</span></span>
-<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span>
-<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by Customer</span></span>
-<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_unique_stockcodes =</span> <span class="fu">n_distinct</span>(StockCode)  <span class="co"># Count unique StockCodes per customer</span></span>
-<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by CustomerID</span></span>
-<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_spent =</span> <span class="fu">sum</span>(Quantity <span class="sc">*</span> UnitPrice, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="co"># Sum total amount spent per customer</span></span>
-<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span>
-<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by CustomerID</span></span>
-<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_spent =</span> <span class="fu">sum</span>(Quantity <span class="sc">*</span> UnitPrice, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),  <span class="co"># Total amount spent per customer</span></span>
-<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_unique_stockcodes =</span> <span class="fu">n_distinct</span>(StockCode),  <span class="co"># Count of unique products purchased</span></span>
-<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_spent_per_product =</span> total_spent <span class="sc">/</span> total_unique_stockcodes  <span class="co"># Average spend per product</span></span>
-<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span>
-<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">avg_days_between_orders =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(avg_days_between_orders), <span class="dv">0</span>, avg_days_between_orders))</span>
-<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by CustomerID</span></span>
-<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-76"><a href="#cb21-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_quantity =</span> <span class="fu">sum</span>(Quantity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),  <span class="co"># Total quantity purchased per customer</span></span>
-<span id="cb21-77"><a href="#cb21-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_orders =</span> <span class="fu">n_distinct</span>(InvoiceNo),  <span class="co"># Count unique orders per customer</span></span>
-<span id="cb21-78"><a href="#cb21-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_quantity_per_order =</span> total_quantity <span class="sc">/</span> total_orders  <span class="co"># Compute average quantity per order</span></span>
-<span id="cb21-79"><a href="#cb21-79" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-80"><a href="#cb21-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_distinct_stockcodes =</span> <span class="fu">n_distinct</span>(StockCode)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_quantity_purchased =</span> <span class="fu">sum</span>(Quantity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#avg days betwwen orders</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_order_date =</span> <span class="fu">min</span>(InvoiceDate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">last_order_date =</span> <span class="fu">max</span>(InvoiceDate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">customer_active_days =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(last_order_date, first_order_date, <span class="at">units =</span> <span class="st">"days"</span>))</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(InvoiceDate) <span class="sc">%&gt;%</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">days_since_last_order =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(InvoiceDate, <span class="fu">lag</span>(InvoiceDate), <span class="at">units =</span> <span class="st">"days"</span>)),</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_days_between_orders =</span> <span class="fu">mean</span>(days_since_last_order, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">days_since_last_order =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(days_since_last_order), <span class="dv">0</span>, days_since_last_order)  <span class="co"># Replace NA with 0</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="co"># No of orders</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group data by CustomerID</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_orders =</span> <span class="fu">n_distinct</span>(InvoiceNo)  <span class="co"># Count unique InvoiceNo per customer</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to maintain normal dataframe structure</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group data by CustomerID</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_quantity =</span> <span class="fu">sum</span>(Quantity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="co"># Sum all Quantity values per customer</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by Customer</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_unique_stockcodes =</span> <span class="fu">n_distinct</span>(StockCode)  <span class="co"># Count unique StockCodes per customer</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by CustomerID</span></span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_spent =</span> <span class="fu">sum</span>(Quantity <span class="sc">*</span> UnitPrice, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="co"># Sum total amount spent per customer</span></span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by CustomerID</span></span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_spent =</span> <span class="fu">sum</span>(Quantity <span class="sc">*</span> UnitPrice, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),  <span class="co"># Total amount spent per customer</span></span>
+<span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_unique_stockcodes =</span> <span class="fu">n_distinct</span>(StockCode),  <span class="co"># Count of unique products purchased</span></span>
+<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_spent_per_product =</span> total_spent <span class="sc">/</span> total_unique_stockcodes  <span class="co"># Average spend per product</span></span>
+<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span>
+<span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">avg_days_between_orders =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(avg_days_between_orders), <span class="dv">0</span>, avg_days_between_orders))</span>
+<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CustomerID) <span class="sc">%&gt;%</span>  <span class="co"># Group by CustomerID</span></span>
+<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_quantity =</span> <span class="fu">sum</span>(Quantity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),  <span class="co"># Total quantity purchased per customer</span></span>
+<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_orders =</span> <span class="fu">n_distinct</span>(InvoiceNo),  <span class="co"># Count unique orders per customer</span></span>
+<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_quantity_per_order =</span> total_quantity <span class="sc">/</span> total_orders  <span class="co"># Compute average quantity per order</span></span>
+<span id="cb22-79"><a href="#cb22-79" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-80"><a href="#cb22-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Remove grouping to restore normal dataframe structure</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
-<section id="adding-dummy-variables" class="level3" data-number="2.5.2">
-<h3 data-number="2.5.2" class="anchored" data-anchor-id="adding-dummy-variables"><span class="header-section-number">2.5.2</span> Adding dummy variables</h3>
+<section id="adding-dummy-variables" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="adding-dummy-variables"><span class="header-section-number">2.6.2</span> Adding dummy variables</h3>
 <p>This code snippet uses the <strong>caret</strong> package to create dummy (one-hot encoded) variables for the “Country” column in your dataset. It works as follows:</p>
 <p><strong>dummyVars(“~ Country”, data = retaildata):</strong><br>
 Creates a dummy variable model for the “Country” column, which specifies how to convert the categorical variable into a set of binary (dummy) columns.</p>
@@ -548,56 +590,56 @@ Combines the original dataset with the new dummy variables side by side, so you 
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dummy_model <span class="ot">&lt;-</span> <span class="fu">dummyVars</span>(<span class="st">"~ Country"</span>, <span class="at">data =</span> retaildata)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>country_dummies <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">predict</span>(dummy_model, <span class="at">newdata =</span> retaildata))</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine dummy columns back into the data set</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> <span class="fu">cbind</span>(retaildata, country_dummies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dummy_model <span class="ot">&lt;-</span> <span class="fu">dummyVars</span>(<span class="st">"~ Country"</span>, <span class="at">data =</span> retaildata)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>country_dummies <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">predict</span>(dummy_model, <span class="at">newdata =</span> retaildata))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine dummy columns back into the data set</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>retaildata <span class="ot">&lt;-</span> <span class="fu">cbind</span>(retaildata, country_dummies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Removing variables and standarizing data set</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Remove the specified columns</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Description, <span class="sc">-</span>Country, <span class="sc">-</span>Quantity, <span class="sc">-</span>UnitPrice, <span class="sc">-</span>InvoiceDate, <span class="sc">-</span>StockCode, <span class="sc">-</span>first_order_date, <span class="sc">-</span>last_order_date, <span class="sc">-</span>InvoiceNo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Remove the specified columns</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Description, <span class="sc">-</span>Country, <span class="sc">-</span>Quantity, <span class="sc">-</span>UnitPrice, <span class="sc">-</span>InvoiceDate, <span class="sc">-</span>StockCode, <span class="sc">-</span>first_order_date, <span class="sc">-</span>last_order_date, <span class="sc">-</span>InvoiceNo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.integer, as.numeric)  <span class="co"># Convert all integer columns to numeric</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()  <span class="co"># Removes completely identical rows (duplicates across all columns)</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Gem CustomerID i en separat vektor, inden du fjerner den</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>customerIDs <span class="ot">&lt;-</span> retaildata_scaled<span class="sc">$</span>CustomerID</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>CustomerID)</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify columns that have more than two unique values</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>cols_to_scale <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_if</span>(is.numeric) <span class="sc">%&gt;%</span>  <span class="co"># Select only numeric columns</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(n_distinct) <span class="sc">%&gt;%</span>  <span class="co"># Count distinct values per column</span></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, unique_values) <span class="sc">%&gt;%</span>  <span class="co"># Convert to long format</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(unique_values <span class="sc">&gt;</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span>  <span class="co"># Keep only columns with more than 2 unique values</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(variable)  <span class="co"># Extract column names</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize only the selected columns</span></span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(cols_to_scale), scale)  <span class="co"># Apply scale() only to selected columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.integer, as.numeric)  <span class="co"># Convert all integer columns to numeric</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()  <span class="co"># Removes completely identical rows (duplicates across all columns)</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Gem CustomerID i en separat vektor, inden du fjerner den</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>customerIDs <span class="ot">&lt;-</span> retaildata_scaled<span class="sc">$</span>CustomerID</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>CustomerID)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify columns that have more than two unique values</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>cols_to_scale <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_if</span>(is.numeric) <span class="sc">%&gt;%</span>  <span class="co"># Select only numeric columns</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(n_distinct) <span class="sc">%&gt;%</span>  <span class="co"># Count distinct values per column</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, unique_values) <span class="sc">%&gt;%</span>  <span class="co"># Convert to long format</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(unique_values <span class="sc">&gt;</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span>  <span class="co"># Keep only columns with more than 2 unique values</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(variable)  <span class="co"># Extract column names</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize only the selected columns</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>retaildata_scaled <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(cols_to_scale), scale)  <span class="co"># Apply scale() only to selected columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Check for NA values before K-means</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(retaildata_scaled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(retaildata_scaled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   21422 obs. of  48 variables:
@@ -674,14 +716,14 @@ Combines the original dataset with the new dummy variables side by side, so you 
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(retaildata_scaled))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(retaildata_scaled))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(retaildata_scaled))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(retaildata_scaled))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                          
@@ -736,27 +778,27 @@ Country.United.Arab.Emirates       Country.United.Kingdom
 </div>
 </section>
 </section>
-<section id="modelling" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="modelling"><span class="header-section-number">2.6</span> Modelling</h2>
+<section id="modelling" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="modelling"><span class="header-section-number">2.7</span> Modelling</h2>
 <p>The <strong>Modeling</strong> phase in CRISP-DM focuses on applying <strong>statistical or machine learning algorithms</strong> to extract patterns and insights from the prepared data. This involves <strong>selecting appropriate models, tuning hyperparameters, training the models, and evaluating their performance</strong> using relevant metrics (e.g., accuracy, RMSE, precision-recall). Different models may be tested and compared to identify the best-performing approach. A well-structured modeling process ensures <strong>robust and reliable predictions</strong> that align with business objectives.</p>
 <p>This code first converts all integer columns to numeric and removes any duplicate rows from the dataset. It then saves the “CustomerID” column in a separate vector and removes it temporarily so that it is not affected by the scaling process. Next, the code identifies all numeric columns that have more than two unique values (i.e., actual features) and excludes “CustomerID” from this list. Finally, it applies standardization (scaling) to these selected columns. Optionally, the “CustomerID” column can be re-added to the dataset afterward. Useing the “elbow” method, we defines the optimal cnumber of clusters to 7.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the Elbow Method to choose the optimal number of clusters</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Ensures reproducible results</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>wss <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">20</span>)  <span class="co"># Vector to store total within-cluster sum of squares (WSS) for k=1..20</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) {</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(retaildata_scaled, <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">10</span>, <span class="at">iter.max =</span> <span class="dv">20</span>)</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  wss[k] <span class="ot">&lt;-</span> model<span class="sc">$</span>tot.withinss</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Plot the results and look for the “elbow”</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, wss, <span class="at">type =</span> <span class="st">"b"</span>,</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters (k)"</span>,</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Total Within-Cluster Sum of Squares (WSS)"</span>,</span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Elbow Method for Retail Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the Elbow Method to choose the optimal number of clusters</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Ensures reproducible results</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>wss <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">20</span>)  <span class="co"># Vector to store total within-cluster sum of squares (WSS) for k=1..20</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) {</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(retaildata_scaled, <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">10</span>, <span class="at">iter.max =</span> <span class="dv">20</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  wss[k] <span class="ot">&lt;-</span> model<span class="sc">$</span>tot.withinss</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Plot the results and look for the “elbow”</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, wss, <span class="at">type =</span> <span class="st">"b"</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters (k)"</span>,</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Total Within-Cluster Sum of Squares (WSS)"</span>,</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Elbow Method for Retail Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -770,31 +812,31 @@ Country.United.Arab.Emirates       Country.United.Kingdom
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fmsb)  <span class="co"># Load for radar charts</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># Load for data manipulation</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)  <span class="co"># Load for data reshaping</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Ensures reproducibility</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>k_optimal <span class="ot">&lt;-</span> <span class="dv">4</span>  <span class="co"># Set the optimal number of clusters to 4</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the K-means model with the chosen number of clusters</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(retaildata_scaled, <span class="at">centers =</span> k_optimal, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the cluster centers to a dataframe for visualization</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>centers_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a column to label each cluster</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>centers_df<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(centers_df))</span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to 'long' format for ggplot2 visualization</span></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>centers_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(centers_df, <span class="at">id.vars =</span> <span class="st">"Cluster"</span>)</span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar plot to visualize cluster centroids</span></span>
-<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(centers_long, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> value, <span class="at">fill =</span> Cluster)) <span class="sc">+</span> </span>
-<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span>  <span class="co"># Bar plot for centroid values</span></span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Rotate x-axis labels</span></span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Feature"</span>, <span class="at">y =</span> <span class="st">"Centroid Value"</span>, <span class="at">fill =</span> <span class="st">"Cluster"</span>) <span class="sc">+</span>  <span class="co"># Axis labels and legend</span></span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Centroid Values for Each Cluster from K-Means"</span>)  <span class="co"># Plot title</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fmsb)  <span class="co"># Load for radar charts</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># Load for data manipulation</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)  <span class="co"># Load for data reshaping</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Ensures reproducibility</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>k_optimal <span class="ot">&lt;-</span> <span class="dv">4</span>  <span class="co"># Set the optimal number of clusters to 4</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the K-means model with the chosen number of clusters</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(retaildata_scaled, <span class="at">centers =</span> k_optimal, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the cluster centers to a dataframe for visualization</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>centers_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a column to label each cluster</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>centers_df<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(centers_df))</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to 'long' format for ggplot2 visualization</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>centers_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(centers_df, <span class="at">id.vars =</span> <span class="st">"Cluster"</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar plot to visualize cluster centroids</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(centers_long, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> value, <span class="at">fill =</span> Cluster)) <span class="sc">+</span> </span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span>  <span class="co"># Bar plot for centroid values</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Rotate x-axis labels</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Feature"</span>, <span class="at">y =</span> <span class="st">"Centroid Value"</span>, <span class="at">fill =</span> <span class="st">"Cluster"</span>) <span class="sc">+</span>  <span class="co"># Axis labels and legend</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Centroid Values for Each Cluster from K-Means"</span>)  <span class="co"># Plot title</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -805,11 +847,11 @@ Country.United.Arab.Emirates       Country.United.Kingdom
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign cluster labels to the original dataset</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>retaildata_scaled<span class="sc">$</span>clusterKmeans <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(kmeans_model<span class="sc">$</span>cluster)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the number of observations in each cluster</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(retaildata_scaled<span class="sc">$</span>clusterKmeans)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign cluster labels to the original dataset</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>retaildata_scaled<span class="sc">$</span>clusterKmeans <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(kmeans_model<span class="sc">$</span>cluster)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the number of observations in each cluster</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(retaildata_scaled<span class="sc">$</span>clusterKmeans)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -818,8 +860,8 @@ Country.United.Arab.Emirates       Country.United.Kingdom
 </div>
 </div>
 </section>
-<section id="evaluation" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="evaluation"><span class="header-section-number">2.7</span> Evaluation</h2>
+<section id="evaluation" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="evaluation"><span class="header-section-number">2.8</span> Evaluation</h2>
 <p>The <strong>Evaluation</strong> phase in CRISP-DM ensures that the developed model meets <strong>business objectives and delivers meaningful insights</strong>. This involves assessing <strong>model performance using key metrics</strong> (e.g., accuracy, precision, recall, RMSE), checking for <strong>overfitting or bias</strong>, and validating whether the model’s predictions are actionable. If the results are unsatisfactory, adjustments may be needed in <strong>data preparation or modeling</strong> before deployment. The goal is to ensure the model is <strong>reliable, interpretable, and aligned with business needs</strong> before implementation.</p>
 <p>This code block performs several key tasks in evaluating and integrating the clustering results:</p>
 <p><strong>Centroid Extraction and Visualization:</strong><br>
@@ -874,14 +916,14 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert K-Means centroids to a readable dataframe</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>centroid_values <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a cluster identifier column</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>centroid_values<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(centroid_values)</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the table with all cluster centroid values</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(centroid_values, <span class="at">digits =</span> <span class="dv">3</span>)  <span class="co"># Show 3 decimal places for readability</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert K-Means centroids to a readable dataframe</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>centroid_values <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a cluster identifier column</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>centroid_values<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(centroid_values)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the table with all cluster centroid values</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(centroid_values, <span class="at">digits =</span> <span class="dv">3</span>)  <span class="co"># Show 3 decimal places for readability</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  total_distinct_stockcodes total_quantity_purchased customer_active_days
@@ -952,52 +994,52 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fmsb)  <span class="co"># Load for radar charts</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># Load for data manipulation</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)  <span class="co"># Load for data reshaping</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to plot only the most defining features for a cluster</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>plot_top_features_radar <span class="ot">&lt;-</span> <span class="cf">function</span>(cluster_num, <span class="at">top_n =</span> <span class="dv">5</span>) {</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the centroid values for the selected cluster</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  cluster_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)[cluster_num, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find the top N most influential features (highest absolute values)</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  top_features <span class="ot">&lt;-</span> cluster_data <span class="sc">%&gt;%</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"Feature"</span>, <span class="at">value =</span> <span class="st">"CentroidValue"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">abs</span>(CentroidValue))) <span class="sc">%&gt;%</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span>top_n) <span class="sc">%&gt;%</span>  <span class="co"># Select only the top N features</span></span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(Feature)  <span class="co"># Extract feature names</span></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset the centroid data to keep only the selected features</span></span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  cluster_data <span class="ot">&lt;-</span> cluster_data[, top_features, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find min/max values for the selected features for scaling</span></span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  max_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)[, top_features, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, max)</span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  min_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)[, top_features, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, min)</span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add min/max rows for normalization</span></span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  cluster_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(max_vals, min_vals, cluster_data)</span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define colors for visualization</span></span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>  cluster_color <span class="ot">&lt;-</span> <span class="st">"blue"</span></span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  fill_color <span class="ot">&lt;-</span> <span class="fu">adjustcolor</span>(cluster_color, <span class="at">alpha.f =</span> <span class="fl">0.3</span>)  <span class="co"># Lightened color</span></span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate the radar chart</span></span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">radarchart</span>(cluster_data,</span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">axistype =</span> <span class="dv">2</span>,  <span class="co"># Show axis labels</span></span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">pcol =</span> cluster_color,  <span class="co"># Border color for the cluster</span></span>
-<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">pfcol =</span> fill_color,  <span class="co"># Fill color</span></span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">plwd =</span> <span class="dv">2</span>,  <span class="co"># Line width</span></span>
-<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">cglcol =</span> <span class="st">"gray"</span>, <span class="at">cglty =</span> <span class="dv">1</span>, <span class="at">cglwd =</span> <span class="fl">0.8</span>,  <span class="co"># Grid settings</span></span>
-<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>             <span class="at">axislabcol =</span> <span class="st">"black"</span>,  <span class="co"># Axis label color</span></span>
-<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>             <span class="at">vlcex =</span> <span class="fl">0.8</span>)  <span class="co"># Size of variable labels</span></span>
-<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a title</span></span>
-<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"Top"</span>, top_n, <span class="st">"Features for Cluster"</span>, cluster_num), <span class="at">cex.main =</span> <span class="fl">1.5</span>)</span>
-<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-46"><a href="#cb37-46" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">1</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fmsb)  <span class="co"># Load for radar charts</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># Load for data manipulation</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)  <span class="co"># Load for data reshaping</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to plot only the most defining features for a cluster</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>plot_top_features_radar <span class="ot">&lt;-</span> <span class="cf">function</span>(cluster_num, <span class="at">top_n =</span> <span class="dv">5</span>) {</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the centroid values for the selected cluster</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  cluster_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)[cluster_num, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find the top N most influential features (highest absolute values)</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  top_features <span class="ot">&lt;-</span> cluster_data <span class="sc">%&gt;%</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"Feature"</span>, <span class="at">value =</span> <span class="st">"CentroidValue"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">abs</span>(CentroidValue))) <span class="sc">%&gt;%</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span>top_n) <span class="sc">%&gt;%</span>  <span class="co"># Select only the top N features</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(Feature)  <span class="co"># Extract feature names</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset the centroid data to keep only the selected features</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>  cluster_data <span class="ot">&lt;-</span> cluster_data[, top_features, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find min/max values for the selected features for scaling</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  max_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)[, top_features, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, max)</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>  min_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">as.data.frame</span>(kmeans_model<span class="sc">$</span>centers)[, top_features, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, min)</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add min/max rows for normalization</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>  cluster_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(max_vals, min_vals, cluster_data)</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define colors for visualization</span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>  cluster_color <span class="ot">&lt;-</span> <span class="st">"blue"</span></span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>  fill_color <span class="ot">&lt;-</span> <span class="fu">adjustcolor</span>(cluster_color, <span class="at">alpha.f =</span> <span class="fl">0.3</span>)  <span class="co"># Lightened color</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate the radar chart</span></span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">radarchart</span>(cluster_data,</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">axistype =</span> <span class="dv">2</span>,  <span class="co"># Show axis labels</span></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">pcol =</span> cluster_color,  <span class="co"># Border color for the cluster</span></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">pfcol =</span> fill_color,  <span class="co"># Fill color</span></span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">plwd =</span> <span class="dv">2</span>,  <span class="co"># Line width</span></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">cglcol =</span> <span class="st">"gray"</span>, <span class="at">cglty =</span> <span class="dv">1</span>, <span class="at">cglwd =</span> <span class="fl">0.8</span>,  <span class="co"># Grid settings</span></span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>             <span class="at">axislabcol =</span> <span class="st">"black"</span>,  <span class="co"># Axis label color</span></span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>             <span class="at">vlcex =</span> <span class="fl">0.8</span>)  <span class="co"># Size of variable labels</span></span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a title</span></span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"Top"</span>, top_n, <span class="st">"Features for Cluster"</span>, cluster_num), <span class="at">cex.main =</span> <span class="fl">1.5</span>)</span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-46"><a href="#cb38-46" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">1</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1008,7 +1050,7 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">2</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">2</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1019,7 +1061,7 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">3</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">3</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1030,7 +1072,7 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">4</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_top_features_radar</span>(<span class="dv">4</span>, <span class="at">top_n =</span> <span class="dv">6</span>)  <span class="co"># View Cluster 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1041,10 +1083,10 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>cluster_summary <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(clusterKmeans) <span class="sc">%&gt;%</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)  <span class="co"># Show all cluster mean values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cluster_summary <span class="ot">&lt;-</span> retaildata_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(clusterKmeans) <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)  <span class="co"># Show all cluster mean values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 49
@@ -1065,34 +1107,34 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <p><img src="images/clipboard-1105416059.png" class="img-fluid"></p>
 </section>
-<section id="deployment" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="deployment"><span class="header-section-number">2.8</span> Deployment</h2>
+<section id="deployment" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="deployment"><span class="header-section-number">2.9</span> Deployment</h2>
 <p>The <strong>Deployment</strong> phase in CRISP-DM focuses on integrating the final model into a <strong>real-world application or business process</strong>. This can involve <strong>automating predictions, embedding the model into a system, or generating reports for decision-making</strong>. Monitoring and maintenance are crucial to ensure the model remains accurate and adapts to new data over time. The ultimate goal is to <strong>turn insights into actionable strategies</strong> that drive business value.</p>
 <p>This code is part of the deployment stage. It converts the cluster labels (stored in the “clusterKmeans” column) into descriptive customer segments for both the scaled dataset (<code>retaildata_scaled</code>) and the joined dataset (<code>retaildata_with_segments</code>). It then creates a table of the number of customers in each segment, which is visualized using a bar plot. Finally, it generates two box plots: one showing the distribution of “total_quantity_purchased” and the other displaying “customer_active_days” for each customer segment. These visualizations provide an overview of both the size and key behavioral characteristics of each customer group.</p>
 <p>Feel free to ask if you need further modifications or explanations!</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>retaildata_scaled<span class="sc">$</span>customer_segment <span class="ot">&lt;-</span> <span class="fu">factor</span>(retaildata_scaled<span class="sc">$</span>clusterKmeans,</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Occasional Buyers"</span>, </span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"High Value / Bulk Buyers"</span>,</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Frequest Buyers"</span>,</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Churn Risk Customers"</span></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>                                                        ))</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>retaildata_with_segments<span class="sc">$</span>customer_segment <span class="ot">&lt;-</span> <span class="fu">factor</span>(retaildata_with_segments<span class="sc">$</span>clusterKmeans,</span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Occasional Buyers"</span>, </span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"High Value / Bulk Buyers"</span>,</span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Frequest Buyers"</span>,</span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Churn Risk Customers"</span></span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>                                                        ))</span>
-<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>cluster_sizes <span class="ot">&lt;-</span> <span class="fu">table</span>(retaildata_scaled<span class="sc">$</span>customer_segment)</span>
-<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(cluster_sizes, <span class="at">main =</span> <span class="st">"Number of Customers in Each Segment"</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>retaildata_scaled<span class="sc">$</span>customer_segment <span class="ot">&lt;-</span> <span class="fu">factor</span>(retaildata_scaled<span class="sc">$</span>clusterKmeans,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Occasional Buyers"</span>, </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"High Value / Bulk Buyers"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Frequest Buyers"</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Churn Risk Customers"</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>                                                        ))</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>retaildata_with_segments<span class="sc">$</span>customer_segment <span class="ot">&lt;-</span> <span class="fu">factor</span>(retaildata_with_segments<span class="sc">$</span>clusterKmeans,</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Occasional Buyers"</span>, </span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"High Value / Bulk Buyers"</span>,</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Frequest Buyers"</span>,</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"Churn Risk Customers"</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>                                                        ))</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>cluster_sizes <span class="ot">&lt;-</span> <span class="fu">table</span>(retaildata_scaled<span class="sc">$</span>customer_segment)</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(cluster_sizes, <span class="at">main =</span> <span class="st">"Number of Customers in Each Segment"</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1103,12 +1145,12 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(retaildata_scaled, <span class="fu">aes</span>(<span class="at">x =</span> customer_segment, <span class="at">y =</span> total_quantity_purchased, <span class="at">fill =</span> customer_segment)) <span class="sc">+</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Quantity Purchased by Customer Segment"</span>,</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer Segment"</span>, </span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Quantity Purchased"</span>) <span class="sc">+</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(retaildata_scaled, <span class="fu">aes</span>(<span class="at">x =</span> customer_segment, <span class="at">y =</span> total_quantity_purchased, <span class="at">fill =</span> customer_segment)) <span class="sc">+</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Quantity Purchased by Customer Segment"</span>,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer Segment"</span>, </span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Quantity Purchased"</span>) <span class="sc">+</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1119,12 +1161,12 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(retaildata_scaled, <span class="fu">aes</span>(<span class="at">x =</span> customer_segment, <span class="at">y =</span> customer_active_days, <span class="at">fill =</span> customer_segment)) <span class="sc">+</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Active Days by Customer Segment"</span>,</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer Segment"</span>, </span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Customer Active Days"</span>) <span class="sc">+</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(retaildata_scaled, <span class="fu">aes</span>(<span class="at">x =</span> customer_segment, <span class="at">y =</span> customer_active_days, <span class="at">fill =</span> customer_segment)) <span class="sc">+</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Active Days by Customer Segment"</span>,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer Segment"</span>, </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Customer Active Days"</span>) <span class="sc">+</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1134,8 +1176,8 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 </div>
 </div>
 </div>
-<section id="segment-insights-actionable-strategies" class="level3" data-number="2.8.1">
-<h3 data-number="2.8.1" class="anchored" data-anchor-id="segment-insights-actionable-strategies"><span class="header-section-number">2.8.1</span> <strong>Segment Insights &amp; Actionable Strategies</strong></h3>
+<section id="segment-insights-actionable-strategies" class="level3" data-number="2.9.1">
+<h3 data-number="2.9.1" class="anchored" data-anchor-id="segment-insights-actionable-strategies"><span class="header-section-number">2.9.1</span> <strong>Segment Insights &amp; Actionable Strategies</strong></h3>
 <p>1️⃣ <strong>Occasional Buyers</strong></p>
 <ul>
 <li><p><strong>Key Insights</strong>: Buy infrequently but remain engaged.</p></li>
@@ -1157,8 +1199,8 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 <li><p><strong>Actionable Strategies</strong>: Run <strong>win-back campaigns</strong>, send <strong>re-engagement emails</strong>, and provide <strong>exclusive discounts</strong> to bring them back.</p></li>
 </ul>
 </section>
-<section id="how-to-use-these-insights" class="level3" data-number="2.8.2">
-<h3 data-number="2.8.2" class="anchored" data-anchor-id="how-to-use-these-insights"><span class="header-section-number">2.8.2</span> <strong>How to Use These Insights</strong></h3>
+<section id="how-to-use-these-insights" class="level3" data-number="2.9.2">
+<h3 data-number="2.9.2" class="anchored" data-anchor-id="how-to-use-these-insights"><span class="header-section-number">2.9.2</span> <strong>How to Use These Insights</strong></h3>
 <p>🔹 <strong>For Marketing Teams:</strong></p>
 <ul>
 <li><p><strong>VIP Customers</strong> → Offer <strong>exclusive perks, loyalty programs, and early access to sales</strong>.</p></li>
@@ -1180,30 +1222,29 @@ Finally, it ensures that the CustomerID column is correctly preserved and of the
 <section id="potential-improvements-to-the-model" class="level3" data-number="3.0.1">
 <h3 data-number="3.0.1" class="anchored" data-anchor-id="potential-improvements-to-the-model"><span class="header-section-number">3.0.1</span> <strong>Potential Improvements to the Model</strong></h3>
 <p>To enhance the accuracy and effectiveness of the customer segmentation model, several refinements can be considered:</p>
-<p>1️⃣ <strong>Incorporating Additional Influential Variables</strong></p>
+</section>
+<section id="incorporating-additional-influential-variables" class="level3" data-number="3.0.2">
+<h3 data-number="3.0.2" class="anchored" data-anchor-id="incorporating-additional-influential-variables"><span class="header-section-number">3.0.2</span> Incorporating Additional Influential Variables</h3>
+<p>The current model may not fully capture all relevant factors affecting customer behavior. Additional features, such as purchase recency, seasonal trends, or product categories, could provide deeper insights into customer preferences.</p>
+<p>Including customer lifetime value (CLV) and frequency of high-value purchases might help distinguish between casual shoppers and truly valuable customers.</p>
+<p>2️⃣ Reevaluating the Impact of Country as a Variable</p>
+<p>Preliminary analysis suggests that geographic location (Country) does not significantly differentiate customer segments. If further validation confirms this, it may be beneficial to remove this variable to reduce noise in the model.</p>
+<p>Instead, regional spending behavior or shipping frequency might be more relevant features to explore.</p>
+<p>3️⃣ Fine-Tuning the Clustering Approach</p>
 <ul>
-<li><p>The current model may <strong>not fully capture all relevant factors</strong> affecting customer behavior. Additional features, such as <strong>purchase recency, seasonal trends, or product categories</strong>, could provide deeper insights into customer preferences.</p></li>
-<li><p>Including <strong>customer lifetime value (CLV)</strong> and <strong>frequency of high-value purchases</strong> might help distinguish between casual shoppers and truly valuable customers.</p></li>
+<li><p><strong>Revisiting the number of clusters</strong>: The current segmentation may be too granular, leading to small, less meaningful groups. Reducing the number of clusters could improve interpretability.</p></li>
+<li><p><strong>Alternative Clustering Methods</strong>: Exploring Hierarchical Clustering or DBSCAN might reveal different grouping patterns that K-Means does not capture effectively.</p></li>
 </ul>
-<p>2️⃣ <strong>Reevaluating the Impact of Country as a Variable</strong></p>
+<p>4️⃣ Feature Engineering, Outlier Handling &amp; Data Transformation</p>
 <ul>
-<li><p>Preliminary analysis suggests that <strong>geographic location (Country) does not significantly differentiate customer segments</strong>. If further validation confirms this, it may be beneficial to <strong>remove this variable</strong> to reduce noise in the model.</p></li>
-<li><p>Instead, <strong>regional spending behavior</strong> or <strong>shipping frequency</strong> might be more relevant features to explore.</p></li>
-</ul>
-<p>3️⃣ <strong>Fine-Tuning the Clustering Approach</strong></p>
-<ul>
-<li><p><strong>Revisiting the number of clusters</strong>: The <strong>current segmentation may be too granular</strong>, leading to <strong>small, less meaningful groups</strong>. Reducing the number of clusters could improve interpretability.</p></li>
-<li><p><strong>Alternative Clustering Methods</strong>: Exploring <strong>Hierarchical Clustering or DBSCAN</strong> might reveal different grouping patterns that K-Means does not capture effectively.</p></li>
-</ul>
-<p>4️⃣ <strong>Feature Engineering &amp; Normalization</strong></p>
-<ul>
-<li><p>Creating <strong>aggregated time-based metrics</strong> (e.g., <strong>purchase trends over different periods</strong>) could improve predictive power.</p></li>
-<li><p>Ensuring that <strong>features are appropriately scaled</strong> while preserving meaningful variations can enhance model performance.</p></li>
+<li><p><strong>Creating aggregated time-based metrics</strong> (e.g., purchase trends over different periods) could improve predictive power.</p></li>
+<li><p><strong>Handling outliers differently</strong>: Instead of removing them, one could apply transformations (e.g., log transformation, Winsorization) to reduce their impact and assess whether the cluster structures change.</p></li>
+<li><p><strong>Testing different scaling methods</strong>: Ensuring that features are appropriately scaled while preserving meaningful variations can enhance model performance.</p></li>
 </ul>
 <p>By iterating on these improvements, the customer segmentation model can become <strong>more robust, actionable, and aligned with real-world business applications</strong></p>
 </section>
-<section id="applying-apriori-can-add-value-to-customer-segmentation" class="level3" data-number="3.0.2">
-<h3 data-number="3.0.2" class="anchored" data-anchor-id="applying-apriori-can-add-value-to-customer-segmentation"><span class="header-section-number">3.0.2</span> <strong>Applying Apriori Can Add Value to Customer Segmentation</strong></h3>
+<section id="applying-apriori-can-add-value-to-customer-segmentation" class="level3" data-number="3.0.3">
+<h3 data-number="3.0.3" class="anchored" data-anchor-id="applying-apriori-can-add-value-to-customer-segmentation"><span class="header-section-number">3.0.3</span> <strong>Applying Apriori Can Add Value to Customer Segmentation</strong></h3>
 <p>By applying <strong>Apriori to transaction data</strong>, you can extract <strong>meaningful rules</strong> that help businesses understand <strong>which products are frequently purchased together</strong> or <strong>how different customer segments behave</strong>. Below are some key applications:</p>
 <p>1️⃣ <strong>Understanding Customer Purchase Behavior</strong></p>
 <ul>
